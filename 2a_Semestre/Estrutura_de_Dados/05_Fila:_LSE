@@ -1,0 +1,33 @@
+/*========== FILA SEQUENCIAL ESTÁTICA ==========*/
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 10 
+
+typedef struct{
+    int itens[MAX];
+    int quantidade;
+} FSE;
+
+void print(FSE list){
+    for(int i = 0; i < list->quantidade; i++){
+        printf("%d\t", list->itens[i]);
+    }    
+}
+
+int main(){
+    FSE minhaLista;
+    minhaLista.quantidade = 0;
+    
+    while(1){
+        int acao, valor;
+        printf("\n\n========== FILA SEQUENCIAL ESTATICA ==========\n\n");
+        printList(l);
+        printf("\n ---------- OPERAÇÕES -----------\n\n"
+            "0 - Desligar o sistema.\n"
+            "1 - Adicionar elementos;\n"
+            "2 - Remover elementos;\n\n"
+            "Ação: ");
+        scanf("%d", &acao);
+    }
+    return 0;
+}
