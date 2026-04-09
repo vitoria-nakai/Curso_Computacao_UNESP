@@ -1,0 +1,66 @@
+/*========== PILHA ENCADEADA DINÂMICA ==========*/
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 10
+
+typedef struct No{
+    int info;
+    struct No * prox;
+} No;
+
+void print(No * list){
+    No * aux = list;
+    printf("\n---------- ELEMENTOS ----------\n");
+    if(aux == NULL){
+        printf("(lista vazia)");
+    }else{
+        while(aux != NULL){
+            printf("%d\t", aux->info);
+            aux = aux->prox;
+        }
+        printf("\n");
+    }
+}
+
+No * add(No * list, int value){
+    No  * new = (No*)malloc(sizeof(No));
+    new->info = value;
+    new->prox = list;
+    list = new;
+    return list;
+}
+
+No * delete(No * list){
+    No * aux = list;
+    list = list->prox;
+    free(aux);
+    return list;
+}
+
+int main(){
+    No * LED = NULL; 
+    int acao, valor;
+    while(1){
+        printf("\n\n========== PILHA ENCADEADA DINÂMICA ==========\n\n");
+        print(LED);
+        printf("\n---------- OPERAÇÕES ----------\n"
+            "0 - Desligar o sistema;\n"
+            "1 - Adicionar elementos;\n"
+            "2 - Remover elementos\n\n"
+            "Ação: ");    
+        scanf("%d", &acao);
+        if(acao == 0){
+            printf("Desligando o sistema... . Obrigada pela atenção.");
+            break;
+        }else if(acao == 1){
+            printf("Digite o valor que deseja adicionar: ");
+            scanf("%d", &valor);
+            LED = add(LED, valor);
+        }else if(acao == 2){
+            LED = delete(LED);
+        }else{
+            printf("Ação não reconhecida. Tente novamente.");
+        }
+    }
+    return 0;
+}
