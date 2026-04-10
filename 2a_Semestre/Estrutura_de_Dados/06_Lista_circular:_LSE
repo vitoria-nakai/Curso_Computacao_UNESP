@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 5
+
+/*
+Preciso programar um firmware para um leitor de música. Preciso de um
+buffer que armazena as últimas 5 frequências captadas, mas a memória é 
+um array fixo.
+*/
+
+typedef struct{
+    int dados[MAX];
+    int posicao_insercao;
+    int total_elementos;
+} LC;
+
+void print(LC list){
+    printf("\n---------- FREQUÊNCIAS ----------\n");
+    if(list.total_elementos == 0){
+        printf("\n(lista vazia)\n");
+    }else{
+        int index;
+        if(list.total_elementos >= MAX){
+            index = 0;
+        }else{
+            index = list.posicao_insercao;
+        }
+        
+        for(int i = index; i < list.total_elementos; i++){
+            printf("%d\t", list.dados[i]);
+        }
+        printf("\n");
+    }
+}
+
+void add(LC * list, int value){
+    list->dados[list->posicao_insercao] = value;
+    list->posicao_insercao = (list->posicao_insercao + 1) % MAX;
+    
+    if(list->total_elementos < MAX){
+        list->total_elementos++;
+    }
+}
+
+int main(){
+    LC lista;
+    lista.posicao_insercao = 0;
+    lista.total_elementos = 0;
+    int freq;
+    while(1){
+        printf("\n\n========== FIRMWARE - LEITOR DE MÚSICA ==========\n\n");
+        print(lista);
+        printf("\nDigite a frequência a ser adicionada: ");
+        scanf("%d", &freq);
+        add(&lista, freq);
+    }
+    return 0;
+}
