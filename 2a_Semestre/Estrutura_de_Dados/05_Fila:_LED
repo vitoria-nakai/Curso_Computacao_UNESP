@@ -1,0 +1,79 @@
+/*========== FILA ENCADEADA DINÂMICA ==========*/
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct no{
+    int item;
+    struct no * prox;
+} no;
+
+void print(no * list){
+    no * aux = list;
+    if(aux == NULL){
+        printf("\n(fila vazia)\n");
+    }else{
+        for(aux; aux != NULL; aux = aux->prox){
+            printf("%d\t", aux->item);
+        }
+        printf("\n");
+    }
+}
+
+no * add(no * list, int value){
+    no * new = (no*)malloc(sizeof(no));
+    new->item = value;
+    no * aux = list;
+    if(aux == NULL){
+        aux = new;
+        new->prox = NULL;
+        return aux;
+    }else{
+        for(aux; aux->prox != NULL; aux = aux->prox);
+        new->prox = aux->prox;
+        aux->prox = new;
+        new->prox = NULL;
+        return list;
+    }
+}
+
+no * delete(no * list){
+    if(list == NULL){
+        printf("A fila já está vazia. Tente novamente.");
+        return list;
+    }else{
+        no * aux = list;
+        list = list->prox;
+        free(aux);
+        return list;
+    }
+}
+
+int main(){
+    no * minhaLista = NULL;
+    int valor, acao;
+    while(1){
+        printf("\n\n========== FILA ENCADEADA DINÂMICA ==========\n\n");
+        print(minhaLista);
+        printf("\n---------- OPERAÇÕES ----------\n"
+            "0 - Desligar o sistema;\n"
+            "1 - Adicionar elementos;\n"
+            "2 - Retirar elementos;\n\n"
+            "Ação: ");
+        scanf("%d", &acao);
+        if(acao == 0){
+            printf("Desligando o sistema... . Obrigada pela atenção.");
+            break;
+        }else if(acao == 1){
+            printf("Digite o valor que deseja adicionar: ");
+            scanf("%d", &valor);
+            minhaLista = add(minhaLista, valor);
+        }else if(acao == 2){
+            minhaLista = delete(minhaLista);
+        }else{
+            printf("Ação não reconhecida. Tente novamente.");
+        }
+        
+    }
+    return 0;
+}
