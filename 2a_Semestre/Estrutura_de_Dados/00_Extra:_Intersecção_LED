@@ -1,0 +1,109 @@
+//FUNÇÃO PARA INTERSEÇÃO DE FILAS ORDENADAS
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct LED{
+    int info;
+    struct LED * prox;
+} LED;
+
+LED * startA(LED * list){
+    
+    //Primeiro nó
+    LED * new = (LED*)malloc(sizeof(LED));
+    new->info = 1;
+    new->prox = NULL;
+    list = new;
+    
+    //Restante
+    LED * aux = list;
+    for(int i = 2; i < 11; i++){
+        LED * new = (LED*)malloc(sizeof(LED));
+        new->info = i;
+        new->prox = NULL;
+        aux->prox = new;
+        aux = aux->prox;
+    }
+    return list;
+}
+
+LED * startB(LED * list){
+    
+    //Primeiro nó
+    LED * new = (LED*)malloc(sizeof(LED));
+    new->info = 4;
+    new->prox = NULL;
+    list = new;
+    
+    //Restante
+    LED * aux = list;
+    for(int i = 5; i < 11; i++){
+        LED * new = (LED*)malloc(sizeof(LED));
+        new->info = i;
+        new->prox = NULL;
+        aux->prox = new;
+        aux = aux->prox;
+    }
+    return list;
+}
+
+void show(LED * list){
+    printf("\n---------- LISTA ----------\n");
+    if(list == NULL){
+        printf("\n(lista vazia)\n");
+    }else{
+        LED * aux = list;
+        while(aux != NULL){
+            printf("%d\t", aux->info);
+            aux = aux->prox;
+        }
+        printf("\n");
+    }
+}
+
+LED * intersecction(LED * A, LED * B){
+    
+    LED * C = NULL;
+    LED * auxA = A;
+    LED * auxC = NULL;
+    
+    //Primeiro nó
+    for(auxA; auxA != NULL; auxA = auxA->prox){
+        for(LED * auxB = B; auxB != NULL; auxB = auxB->prox){
+            if(auxA->info == auxB->info){
+                LED * new = (LED*)malloc(sizeof(LED));
+                new->info = auxA->info;
+                new->prox = NULL;
+                
+                if(C == NULL){ //Primeiro
+                    C = new;
+                    auxC = C;
+                }else{ //Restante
+                    auxC->prox = new;
+                    auxC = auxC->prox;
+                }
+                break;
+            }
+        }
+        
+    }
+    
+    return C;
+}
+
+int main(){
+    LED * lA = NULL;
+    LED * lB = NULL;
+    
+    lA = startA(lA);
+    lB = startB(lB);
+    
+    show(lA);
+    show(lB);
+    
+    LED * C = intersecction(lA, lB);
+    show(C);
+    
+    return 0;
+}
