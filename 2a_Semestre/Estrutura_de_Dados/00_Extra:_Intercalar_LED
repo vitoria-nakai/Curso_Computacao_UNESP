@@ -1,0 +1,97 @@
+//FUNÇÃO PARA INTERCALAR LISTAS ENCADEADAS DINÂMICAS
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct LED{
+    int info;
+    struct LED * prox;
+} LED;
+
+LED * startAll(LED * list, int value){
+    LED * aux = list;
+    
+    //Primeiro nó
+    LED * first = (LED*)malloc(sizeof(LED));
+    first->info = value;
+    first->prox = NULL;
+    aux = first;
+    
+    //Nós restantes
+    for(int i = 0; i < 4; i++){
+        LED * new = (LED*)malloc(sizeof(LED));
+        new->info = value;
+        new->prox = NULL;
+        aux->prox = new;
+        aux = new;
+    }
+    list = first;
+    return list;
+}
+
+void print(LED * list){
+    printf("\n---------- ELEMENTOS ----------\n");
+    if(list == NULL){
+        printf("(lista vazia)");
+    }else{
+        LED * aux = list;
+        while(aux != NULL){
+            printf("%d\t", aux->info);
+            aux = aux->prox;
+        }
+        printf("\n");
+    }
+}
+
+LED * mix(LED * listA, LED * listB){
+    
+    LED * auxA = listA;
+    LED * auxB = listB;
+    LED * listC = NULL;
+    LED * auxC = listC;
+    
+    //Primeiro Nó
+    listC = auxA;
+    auxC = listC;
+    auxA = auxA->prox;
+    
+    while(auxA != NULL && auxB != NULL){
+        auxC->prox = auxB;
+        auxC = auxB;
+        auxB = auxB->prox;
+        
+        auxC->prox = auxA;
+        auxC = auxA;
+        auxA = auxA->prox;
+    }
+    
+    //quando uma das listas sobra
+    while(auxA != NULL){
+        auxC->prox = auxA;
+        auxC = auxA;
+        auxA = auxA->prox;
+    }
+    while(auxB != NULL){
+        auxC->prox = auxB;
+        auxC = auxB;
+        auxB = auxB->prox;
+    }
+    
+    return listC;
+}
+
+int main(){
+    LED * lA = NULL;
+    LED * lB = NULL;
+    
+    lA = startAll(lA, 1);
+    print(lA);
+    
+    lB = startAll(lB, 0);
+    print(lB);
+    
+    LED * lC = mix(lA, lB);
+    print(lC);
+    
+    return 0;
+}
