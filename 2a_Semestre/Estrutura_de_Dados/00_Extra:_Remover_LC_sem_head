@@ -45,25 +45,31 @@ void show(LED * list){
 }
 
 LED * pop(LED * list, int value){
+    LED * aux = list;
+    
     if(list == NULL){
         printf("\nA lista já está vazia. Tente novamente.\n");
+        return list;
+    }else if(list == list->prox){
+        list = NULL;
+        free(aux);
+        return list;
     }else{
-        LED * aux = list;
-        LED * ant = NULL;
-        while(aux->info != value && aux->prox != list){
+        aux = list->prox;
+        LED * ant = list;
+        while(aux->info != value && aux != list){
             ant = aux;
             aux = aux->prox;
         }
-        ant = aux;
-        aux = aux->prox;
         if(aux->info != value){
             printf("Erro.");
+            return list;
         }else{
             ant->prox = aux->prox;
             free(aux);
+            return ant;
         }
     }
-    return list;
 }
 
 int main(){
