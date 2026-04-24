@@ -1,0 +1,67 @@
+/* TASK MANAGER */
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+class Tarefa{
+    private:
+        int id;
+        std::string descricao;
+        int prioridade;
+        bool concluida = 0;
+    public:
+        Tarefa(int Id, std::string d, int p){
+            id = Id;
+            descricao = d;
+            prioridade = p;
+        }
+        int getId() const {
+            return id;
+        }
+        std::string getDesc() const {
+            return descricao;
+        }
+        int getPrioridade() const {
+            return prioridade;
+        }
+        bool getConcluida() const {
+            return concluida;
+        }
+        void completar(){
+            concluida = 1;
+        }
+        void exibir(){
+            std::cout << "[] " << descricao << " - Prioridade " << prioridade << "." << std::endl;
+        }
+};
+
+class ListaTarefas{
+    private:
+        std::vector<Tarefa> tarefas;
+    public:
+        void adicionarTarefa(std::string d, int p){
+            tarefas.emplace_back(id, d, p);   //função de construir o objeto dentro do vetor baseado nas entradas do método Construtor.
+        }
+        void listarPendentes(){
+            for(int i = 0; i < tarefas.size(); i++){
+                if(tarefas[i].getConcluida() == 0){
+                    std::cout << "O QUE NÃO ESTÁ CONCLUÍDO\n\n" << std::endl;
+                    std::cout << "ID: " << tarefas[i].getId() << std::endl;
+                    std::cout << "Descrição: " << tarefas[i].getDesc() << std::endl;
+                    std::cout << "Prioridade: " << tarefas[i].getPrioridade() << std::endl;
+                    std::cout << "-----------------------------------------------------" << std::endl;
+                }
+            }
+        }
+        void marcarFeita(int id){
+            int i = 0;
+            while(i < tarefas.size()){
+                if(tarefas[i].getId() == id){
+                    break;
+                }
+                i++;
+            }
+            tarefas[i].completar();
+        }
+};
