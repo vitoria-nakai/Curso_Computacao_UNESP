@@ -1,44 +1,147 @@
 /*
-ÁRVORE 
-
-OPERAÇÕES BÁSICAS
-- Construção
-- Inserção
-- Eliminação
-- Pesquisa
-- Percurso
-
-3 forma de se percorrer:
-- Pré-ordem: visitar o nó raiz > percorrer em pré-ordem a subárvore esquerda > percorrer em pré-ordem a subárvore direita;
-- In-ordem (simétrica): percorrer em pré-ordem a subárvore esquerda > visitar o nó raiz > percorrer em pré-ordem a subárvore direita;
-- Pós-ordem: percorrer em pré-ordem a subárvore esquerda > percorrer em pré-ordem a subárvore direita > visitar o nó raiz;
-
+ Faça uma árvore que o usuário consegue inserir valores, retirar valores e exibir os dados em
+pré-ordem, in-ordem e pós-ordem.
 */
 
-typedef struct No {
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct No{
     int valor;
     struct No * esquerda;
     struct No * direita;
 } No;
 
-//Função de percorrer em pré-ordem
-void preordem(struct no * p){
-    if(!p) return;
-    printf(p->valor);
-    preordem(p->esquerda);
-    preordem(p->direita);
+No * criar_no(int value){
+    //ALOCAR
+    No * novo_no = (No*)malloc(sizeof(No));
+    //VERIFICAR
+    if(novo_no == NULL){
+        printf("Erro ao alocar memória em novo nó.\n");
+        exit(1);
+    }
+    //ATRIBUIR
+    novo_no->valor = value;
+    novo_no->esquerda = NULL;
+    novo_no->direita = NULL;
+    //RETORNAR
+    return novo_no;
 }
-//Função de percorrer em in-ordem
-void preordem(struct no * p){
-    if(!p) return;
-    preordem(p->esquerda);
-    printf(p->valor);
-    preordem(p->direita);
+
+No * inserir(No * root, int value){
+    //ADICIONAR NO NÓ ATUAL
+    if(root == NULL) return criar_no(value);
+    //ACHAR O NÓ ADEQUADO
+    if(value < root->valor){
+        root->esquerda = inserir(root->esquerda, value);
+    }else if(value > root->valor){
+        root->direita = inserir(root->direita, value);
+    }
+    //RETORNAR
+    return root;
 }
-//Função de percorrer em in-ordem
-void preordem(struct no * p){
-    if(!p) return;
-    preordem(p->esquerda);
-    preordem(p->direita);
-    printf(p->valor);
+
+//FUNÇÃO AUXILIAR DE REMOVER
+No * encontrar_minimo(No * root){
+    //PONTEIRO AUXILIAR
+    No * aux = root;
+    //O MENOR VALOR ESTÁ NA ESQUERDA MÁXIMA
+    while(aux && aux->esquerda != NULL){
+        aux = aux->esquerda;
+    }
+}
+
+//FUNÇÃO PRINCIPAL DE REMOVER
+No * remover(No * root,int value){
+    //QUANDO A RAIZ É VAZIA
+    if(root == NULL) return root;
+    //ENCONTRAR O VALOR
+    if(value < root->valor){
+        root->esquerda = remover(root->esquerda, value);
+    }else if(value > root->valor){
+        root->direita = remover(root->direita, value);
+    }else{ //QUANDO ENCONTRAMOS O VALOR
+        //NÓ COM 1 OU 0 FILHO
+        if(root->esquerda == NULL){
+            No * temp = root->direita;
+            free(root);
+            return temp;
+        }else if(root->direita == NULL){
+            No * temp = root->esquerda;
+            free(root);
+            return temp;
+        }//NÓ COM 2 FILHOS
+        No * temp = encontrar_minimo(root->direita);
+        root->valor = temp->valor;
+        root->direita = remover(root->direita, temp->valor);
+    }
+    return root;
+}
+
+void preordem(No * root){
+    //VERIFICAR
+    if(!root) return;
+    //EXIBIR
+    printf("%d", root->valor);
+    preordem(root->esquerda);
+    preordem(root->direita);
+}
+
+
+void inordem(No * root){
+    //VERIFICAR
+    if(!root) return;
+    //EXIBIR
+    inordem(root->esquerda);
+    printf("%d", root->valor);
+    inordem(root->direita);
+}
+
+void posordem(No * root){
+    //VERIFICAR
+    if(!root) return;
+    //EXIBIR
+    posordem(root->esquerda);
+    posordem(root->direita);
+    printf("%d", root->valor);
+}
+
+int main(){
+    int choice, valor;
+    No * raiz = NULL;
+    while(1){
+        printf("\n\n========== ÁRVORE SIMPLES ==========\n\n"
+                "Operações:\n"
+                "0 - Desligar o sistema.\n"
+                "1 - Inserir um valor inteiro.\n"
+                "2 - Retirar um valor.\n"
+                "3 - Exibir a árvore.\n"
+                "Ação: ");
+        scanf("%d", &choice);
+        if(choice == 0){
+            printf("Desligando o sistema...");
+            break;
+        }else if(choice == 1){
+            printf("Digite o valor inteiro a ser adicionado: ");
+            scanf("%d", &valor);
+            raiz = inserir(raiz, valor);
+        }else if(choice == 2){
+            printf("Digite o valor que deseja retirar: ");
+            scanf("%d", &valor);
+            raiz = remover(raiz, valor);
+        }else if(choice == 3){
+            printf("Digite o tipo de percurso que deseja exibir:\n"
+                "1 - Pré-ordem.\n"
+                "2 - In-ordem.\n"
+                "3 - Pós-ordem.\n"
+                "Tipo: ");
+            scanf("%d", &choice);
+            if(choice == 1) preordem(raiz);
+            else if(choice == 2) inordem(raiz);
+            else if(choice == 3) posordem(raiz);
+        }else{
+            printf("Operação não reconhecidade. Tente novamente.");
+        }
+        
+    }    
 }
